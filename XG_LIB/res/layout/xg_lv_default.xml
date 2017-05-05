@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/v_root"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/iv_pb_bg"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_gravity="center"
+        android:src="@drawable/xg_loading_net"/>
+
+    <ProgressBar
+        android:id="@+id/v_progress"
+        android:layout_width="24dp"
+        android:indeterminateDrawable="@drawable/xg_pb_small"
+        android:indeterminateDuration="1000"
+        android:layout_height="24dp"
+        android:layout_gravity="center"
+        android:visibility="visible" />
+
+    <ListView
+        android:id="@+id/lv"
+        style="@style/lv_one"
+        android:cacheColorHint="@color/x_default_bg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:dividerHeight="0dp"
+        android:scrollbars="none"
+        android:visibility="gone"/>
+
+    </FrameLayout>
+</merge>

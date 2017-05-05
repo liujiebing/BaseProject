@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/v_footer"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <!--<View
+        android:id="@+id/v_split"
+        android:background="#cccccc"
+        android:layout_width="match_parent"
+        android:layout_height="1px"/>-->
+
+    <TextView
+        android:id="@+id/tv_footer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp"
+        android:lines="1"
+        android:text="正在加载。。。"
+        android:textColor="#999999"
+        android:textSize="12sp" />
+
+    <ProgressBar
+        android:id="@+id/footer_progress"
+        android:layout_width="12dp"
+        android:layout_height="12dp"
+        android:layout_marginRight="10dp"
+        android:layout_centerVertical="true"
+        android:layout_toLeftOf="@id/tv_footer"
+        android:indeterminateDrawable="@drawable/xg_pb_footer"
+        android:indeterminateDuration="1000"
+        android:visibility="visible" />
+</RelativeLayout>

@@ -1,0 +1,1 @@
+include ':app', ':XG_LIB', ':THIRD_PARTY_LIB', ':searchBook'

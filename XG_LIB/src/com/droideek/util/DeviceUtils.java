@@ -1,0 +1,489 @@
+package com.droideek.util;
+
+import android.Manifest;
+import android.app.Activity;
+import android.app.ActivityManager;
+import android.app.Application;
+import android.content.ClipData;
+import android.content.Context;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.FeatureInfo;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.res.Resources;
+import android.database.Cursor;
+import android.hardware.Camera;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.net.Uri;
+import android.os.Build;
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.telephony.TelephonyManager;
+import android.text.TextUtils;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.lang.reflect.Method;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Locale;
+
+/**
+ * Created by Droideek on 2016/5/24.
+ */
+public class DeviceUtils {
+    public static final int NUMBER_OR_CHARACTER = 1;
+    public static final int CHINESE = 2;
+    /**
+     * dp 转化为 px
+     *
+     * @param dpValue dpValue
+     * @return int
+     */
+    public static int dp2px(float dpValue) {
+        final float scale = Resources.getSystem().getDisplayMetrics().density;
+        return (int) (dpValue * scale + 0.5f);
+    }
+
+    /**
+     * px 转化为 dp
+     *
+     * @param pxValue pxValue
+     * @return
+     */
+    public static int px2dp(float pxValue) {
+        final float scale = Resources.getSystem().getDisplayMetrics().density;
+        return (int) (pxValue / scale + 0.5f);
+    }
+
+    /**
+     * 获取设备宽度（px）
+     *
+     * @return int
+     */
+    public static int deviceWidth() {
+        return Resources.getSystem().getDisplayMetrics().widthPixels;
+    }
+
+    /**
+     * 获取设备高度（px）
+     *
+     * @return
+     */
+    public static int deviceHeight() {
+        return Resources.getSystem().getDisplayMetrics().heightPixels;
+    }
+
+    /**获取状态栏高度*/
+    public static int getStatusBarHeight(Resources resources) {
+        int result=0;
+        int resourceId  = resources.getIdentifier("status_bar_height", "dimen", "android");
+        if(resourceId>0){
+            result = resources.getDimensionPixelOffset(resourceId);
+        }
+        return result;
+    }
+
+    /**
+     * SD卡判断
+     *
+     * @return boolean
+     */
+    public static boolean isSDCardAvailable() {
+        return Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED);
+    }
+
+    /**
+     * 是否有网
+     *
+     * @param context context
+     * @return boolean
+     */
+    public static boolean isNetworkConnected(Context context) {
+        if (context != null) {
+            ConnectivityManager mConnectivityManager = (ConnectivityManager) context
+                    .getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo mNetworkInfo = mConnectivityManager
+                    .getActiveNetworkInfo();
+            if (mNetworkInfo != null) {
+                return mNetworkInfo.isAvailable();
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 返回版本名字
+     * 对应build.gradle中的versionName
+     *
+     * @param context context
+     * @return String
+     */
+    public static String getVersionName(Context context) {
+        String versionName = "";
+        try {
+            PackageManager packageManager = context.getPackageManager();
+            PackageInfo packInfo = packageManager.getPackageInfo(context.getPackageName(), 0);
+            versionName = packInfo.versionName;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return versionName;
+    }
+
+    /**
+     * 返回版本号
+     * 对应build.gradle中的versionCode
+     *
+     * @param context context
+     * @return String
+     */
+    public static String getVersionCode(Context context) {
+        String versionCode = "";
+        try {
+            PackageManager packageManager = context.getPackageManager();
+            PackageInfo packInfo = packageManager.getPackageInfo(context.getPackageName(), 0);
+            versionCode = String.valueOf(packInfo.versionCode);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return versionCode;
+    }
+
+    /**
+     * 获取设备的唯一标识，deviceId
+     *
+     * @param context context
+     * @return String
+     */
+    public static String getDeviceId(Context context) {
+        TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+        String deviceId = tm.getDeviceId();
+        if (deviceId == null) {
+            return "-";
+        } else {
+            return deviceId;
+        }
+    }
+
+    /**
+     * 获取手机品牌
+     *
+     * @return String
+     */
+    public static String getPhoneBrand() {
+        return Build.BRAND;
+    }
+
+    /**
+     * 获取手机型号
+     *
+     * @return String
+     */
+    public static String getPhoneModel() {
+        return Build.MODEL;
+    }
+
+    /**
+     * 获取手机Android API等级（22、23 ...）
+     *
+     * @return int
+     */
+    public static int getBuildLevel() {
+        return Build.VERSION.SDK_INT;
+    }
+
+    /**
+     * 获取手机Android 版本（4.4、5.0、5.1 ...）
+     *
+     * @return String
+     */
+    public static String getBuildVersion() {
+        return Build.VERSION.RELEASE;
+    }
+
+    /**
+     * 获取手机生产厂商
+     * @return
+     */
+    public static String getBuildManufactuer() {
+        return android.os.Build.MANUFACTURER.toLowerCase(Locale.getDefault());
+    }
+
+    /**
+     * 获取当前App进程的id
+     *
+     * @return int
+     */
+    public static int getAppProcessId() {
+        return android.os.Process.myPid();
+    }
+
+    /**
+     * 获取当前App进程的Name
+     *
+     * @param context   context
+     * @param processId processId
+     * @return String
+     */
+    public static String getAppProcessName(Context context, int processId) {
+        String processName = null;
+        ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        // 获取所有运行App的进程集合
+        List l = am.getRunningAppProcesses();
+        Iterator i = l.iterator();
+        PackageManager pm = context.getPackageManager();
+        while (i.hasNext()) {
+            ActivityManager.RunningAppProcessInfo info = (ActivityManager.RunningAppProcessInfo) (i.next());
+            try {
+                if (info.pid == processId) {
+                    CharSequence c = pm.getApplicationLabel(pm.getApplicationInfo(info.processName, PackageManager.GET_META_DATA));
+
+                    processName = info.processName;
+                    return processName;
+                }
+            } catch (Exception e) {
+
+            }
+        }
+        return processName;
+    }
+
+    /**
+     * 创建App文件夹
+     *
+     * @param appName     appName
+     * @param application application
+     * @return String
+     */
+    public static String createAPPFolder(String appName, Application application) {
+        return createAPPFolder(appName, application, null);
+    }
+
+    /**
+     * 创建App文件夹
+     *
+     * @param appName     appName
+     * @param application application
+     * @param folderName  folderName
+     * @return String
+     */
+    public static String createAPPFolder(String appName, Application application, String folderName) {
+        File root = Environment.getExternalStorageDirectory();
+        File folder;
+        /**
+         * 如果存在SD卡
+         */
+        if (DeviceUtils.isSDCardAvailable() && root != null) {
+            folder = new File(root, appName);
+            if (!folder.exists()) {
+                folder.mkdirs();
+            }
+        } else {
+            /**
+             * 不存在SD卡，就放到缓存文件夹内
+             */
+            root = application.getCacheDir();
+            folder = new File(root, appName);
+            if (!folder.exists()) {
+                folder.mkdirs();
+            }
+        }
+        if (folderName != null) {
+            folder = new File(folder, folderName);
+            if (!folder.exists()) {
+                folder.mkdirs();
+            }
+        }
+        return folder.getAbsolutePath();
+    }
+
+    /**
+     * 通过Uri找到File
+     *
+     * @param context context
+     * @param uri     uri
+     * @return File
+     */
+    public static File uri2File(Activity context, Uri uri) {
+        File file;
+        String[] project = {MediaStore.Images.Media.DATA};
+        Cursor actualImageCursor = context.getContentResolver().query(uri, project, null, null, null);
+        if (actualImageCursor != null) {
+            int actual_image_column_index = actualImageCursor
+                    .getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            actualImageCursor.moveToFirst();
+            String img_path = actualImageCursor
+                    .getString(actual_image_column_index);
+            file = new File(img_path);
+        } else {
+            file = new File(uri.getPath());
+        }
+        if (actualImageCursor != null) actualImageCursor.close();
+        return file;
+    }
+
+    /**
+     * 获取AndroidManifest.xml里 <meta-data>的值
+     *
+     * @param context context
+     * @param name    name
+     * @return String
+     */
+    public static String getMetaData(Context context, String name) {
+        String value = null;
+        try {
+            ApplicationInfo appInfo = context.getPackageManager().getApplicationInfo(context.getPackageName(), PackageManager.GET_META_DATA);
+            value = appInfo.metaData.getString(name);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return value;
+    }
+
+    /**
+     * 复制到剪贴板
+     *
+     * @param context context
+     * @param content content
+     */
+    public static void copy2Clipboard(Context context, String content) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            android.content.ClipboardManager clipboardManager = (android.content.ClipboardManager) context.getSystemService(
+                    Context.CLIPBOARD_SERVICE);
+            ClipData clipData = ClipData.newPlainText(context.getString(com.xg.platform.R.string.app_name), content);
+            clipboardManager.setPrimaryClip(clipData);
+        } else {
+            android.text.ClipboardManager clipboardManager = (android.text.ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+            clipboardManager.setText(content);
+        }
+    }
+
+
+
+
+    public static boolean checkPermission(Context context, String permission) {
+        boolean result = false;
+        if (Build.VERSION.SDK_INT >= 23) {
+            try {
+                Class<?> clazz = Class.forName("android.content.Context");
+                Method method = clazz.getMethod("checkSelfPermission", String.class);
+                int rest = (Integer) method.invoke(context, permission);
+                if (rest == PackageManager.PERMISSION_GRANTED) {
+                    result = true;
+                } else {
+                    result = false;
+                }
+            } catch (Exception e) {
+                result = false;
+            }
+        } else {
+            PackageManager pm = context.getPackageManager();
+            if (pm.checkPermission(permission, context.getPackageName()) == PackageManager.PERMISSION_GRANTED) {
+                result = true;
+            }
+        }
+        return result;
+    }
+
+
+    public static String getDeviceInfo(Context context) {
+        try {
+            org.json.JSONObject json = new org.json.JSONObject();
+            android.telephony.TelephonyManager tm = (android.telephony.TelephonyManager) context
+                    .getSystemService(Context.TELEPHONY_SERVICE);
+            String device_id = null;
+            if (checkPermission(context, Manifest.permission.READ_PHONE_STATE)) {
+                device_id = tm.getDeviceId();
+            }
+            String mac = null;
+            FileReader fstream = null;
+            try {
+                fstream = new FileReader("/sys/class/net/wlan0/address");
+            } catch (FileNotFoundException e) {
+                fstream = new FileReader("/sys/class/net/eth0/address");
+            }
+            BufferedReader in = null;
+            if (fstream != null) {
+                try {
+                    in = new BufferedReader(fstream, 1024);
+                    mac = in.readLine();
+                } catch (IOException e) {
+                } finally {
+                    if (fstream != null) {
+                        try {
+                            fstream.close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    if (in != null) {
+                        try {
+                            in.close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
+            json.put("mac", mac);
+            if (TextUtils.isEmpty(device_id)) {
+                device_id = mac;
+            }
+            if (TextUtils.isEmpty(device_id)) {
+                device_id = android.provider.Settings.Secure.getString(context.getContentResolver(),
+                        android.provider.Settings.Secure.ANDROID_ID);
+            }
+            json.put("device_id", device_id);
+            return json.toString();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
+    /*判断手机是否支持闪光灯*/
+    public static boolean isSupportCameraLedFlash(PackageManager pm) {
+        if (pm != null) {
+            FeatureInfo[] features = pm.getSystemAvailableFeatures();
+            if (features != null) {
+                for (FeatureInfo f : features) {
+                    if (f != null && PackageManager.FEATURE_CAMERA_FLASH.equals(f.name))
+                        return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     *  android6.0以下判断相机是否可用  返回true 表示可以使用  返回false表示不可以使用
+     */
+    public static boolean cameraIsUsable() {
+        boolean isCanUse = true;
+        Camera mCamera = null;
+        try {
+            mCamera = Camera.open();
+            Camera.Parameters mParameters = mCamera.getParameters(); //针对魅族手机
+            mCamera.setParameters(mParameters);
+        } catch (Exception e) {
+            isCanUse = false;
+        }
+
+        if (mCamera != null) {
+            try {
+                mCamera.release();
+            } catch (Exception e) {
+                e.printStackTrace();
+                return isCanUse;
+            }
+        }
+        return isCanUse;
+    }
+
+}

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.lib.swipetoloadlayout.seagoor.SeagoorRefreshHeaderView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="80dp">
+
+    <FrameLayout
+        android:layout_marginLeft="55dp"
+        android:layout_width="80dp"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:visibility="visible"
+            android:id="@+id/iv_icon"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <ImageView
+            android:visibility="visible"
+            android:id="@+id/iv_running"
+            android:layout_gravity="bottom|center_horizontal"
+            android:layout_width="80dp"
+            android:layout_height="53dp" />
+
+    </FrameLayout>
+
+
+    <LinearLayout
+        android:gravity="center"
+        android:layout_marginLeft="20dp"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <TextView
+            android:text="@string/ptr_header_text"
+            android:padding="2dp"
+            android:textColor="#333333"
+            android:textSize="15sp"
+            android:gravity="left"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/tv_status"
+            android:gravity="left"
+            android:textSize="12sp"
+            android:padding="2dp"
+            android:textColor="#999999"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+
+    </LinearLayout>
+
+</com.lib.swipetoloadlayout.seagoor.SeagoorRefreshHeaderView>

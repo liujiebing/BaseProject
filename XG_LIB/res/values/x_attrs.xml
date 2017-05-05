@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="x_default_bg">#eeeeee</color>
+    <color name="x_white">#ffffff</color>
+    <dimen name="x_default_padding">10dp</dimen>
+
+    <color name="x_color_custom">#0099CC</color>
+    <color name="x_color_alert">#CC0000</color>
+    <color name="x_color_confirm">#FF8800</color>
+    <color name="x_color_info">#669900</color>
+
+    <item name="v_error" type="id"/>
+    <item name="v_error_msg" type="id"/>
+    <item name="v_net_break" type="id"/>
+
+</resources>

@@ -1,0 +1,15 @@
+<resources>
+
+    <string name="app_name">xg_lib</string>
+
+
+    <string name="x_msg_token_invalid">登录失效，请重新登录</string>
+    <string name="x_error_program">~小西开小差啦，待会儿试试。</string>
+    <string name="x_error_net_req">~网络开小差啦，重连后试试。</string>
+    <string name="x_msg_check_net">请检查网络是否可用</string>
+    <string name="x_close">关闭</string>
+    <string name="x_click_refresh">点击刷新</string>
+    <string name="x_check_more">查看更多</string>
+
+
+</resources>
