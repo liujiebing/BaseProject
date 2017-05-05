@@ -2,9 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/BASE_LIB/BASE_LIB.iml" filepath="$PROJECT_DIR$/BASE_LIB/BASE_LIB.iml" />
       <module fileurl="file://$PROJECT_DIR$/BaseProject.iml" filepath="$PROJECT_DIR$/BaseProject.iml" />
       <module fileurl="file://$PROJECT_DIR$/THIRD_PARTY_LIB/THIRD_PARTY_LIB.iml" filepath="$PROJECT_DIR$/THIRD_PARTY_LIB/THIRD_PARTY_LIB.iml" />
-      <module fileurl="file://$PROJECT_DIR$/XG_LIB/XG_LIB.iml" filepath="$PROJECT_DIR$/XG_LIB/XG_LIB.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/searchBook/searchBook.iml" filepath="$PROJECT_DIR$/searchBook/searchBook.iml" />
     </modules>
